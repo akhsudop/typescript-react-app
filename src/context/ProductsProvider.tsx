@@ -1,4 +1,4 @@
-import { createContext, ReactElement, useState } from "react";
+import { createContext, ReactElement, useEffect, useState } from "react";
 
 export type ProductType = {
   sku: string;
@@ -34,6 +34,27 @@ type ChildrenType = { children?: ReactElement };
 
 export const ProductsProvider = ({ children }: ChildrenType): ReactElement => {
   const [products, setProducts] = useState<ProductType[]>(initState);
+
+  // Code without async fetching to simplify deploy:
+
+  useEffect(() => {
+    setProducts(initState);
+  }, []);
+
+  //async fetching:
+
+  // useEffect(() => {
+  //     const fetchProducts = async (): Promise<ProductType[]> => {
+  //         const data = await fetch('url').then(res => {
+  //             return res.json()
+  //         }).catch(err => {
+  //             if (err instanceof Error) console.log(err.message)
+  //         })
+  //         return data
+  //     }
+
+  //     fetchProducts().then(products => setProducts(products))
+  // }, [])
 
   return (
     <ProductsContext.Provider value={{ products }}>
